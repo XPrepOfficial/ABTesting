@@ -12,13 +12,16 @@ function resolveVariant(bucketMap, bucket) {
 }
 
 async function getFeaturesConfig(req, res) {
-  const { userId } = req.query;
+  const { userId, appName } = req.query;
 
   if (!userId) {
     return res.status(400).json({ error: 'userId query param is required' });
   }
+  if (!appName) {
+    return res.status(400).json({ error: 'appName query param is required' });
+  }
 
-  const features = await getAllFeatures();
+  const features = await getAllFeatures(appName);
 
   const experimentKeys = [
     ...new Set(features.map((f) => f.experimentKey).filter(Boolean)),
@@ -29,15 +32,22 @@ async function getFeaturesConfig(req, res) {
   const config = {};
 
   for (const feature of features) {
-    const entry = { enabled: feature.enabled };
+    let entry;
 
-    if (feature.experimentKey) {
-      const experiment = experiments[feature.experimentKey];
-      const variant =
-        experiment && experiment.isActive
-          ? resolveVariant(experiment.bucketMap, getBucketFromUserId(userId))
-          : 'Control';
-      entry.experiment = { variant };
+    if (feature.status === 'Success') {
+      entry = { enabled: true, variant: feature.variant };
+    } else if (feature.status === 'Failure') {
+      entry = { enabled: false, variant: 'control' };
+    } else {
+      entry = { enabled: feature.isActive };
+
+      if (feature.experimentKey) {
+        const experiment = experiments[feature.experimentKey];
+        entry.variant =
+          experiment && experiment.isActive
+            ? resolveVariant(experiment.bucketMap, getBucketFromUserId(userId))
+            : 'Control';
+      }
     }
 
     config[feature.featureKey] = entry;
@@ -47,16 +57,22 @@ async function getFeaturesConfig(req, res) {
 }
 
 async function createOrUpdateFeature(req, res) {
-  const { featureKey, enabled, experimentKey } = req.body;
+  const { featureKey, isActive, status, variant, experimentKey, appName } = req.body;
 
   if (!featureKey) {
     return res.status(400).json({ error: 'featureKey is required' });
   }
-  if (typeof enabled !== 'boolean') {
-    return res.status(400).json({ error: 'enabled must be a boolean' });
+  if (typeof isActive !== 'boolean') {
+    return res.status(400).json({ error: 'isActive must be a boolean' });
+  }
+  if (!appName) {
+    return res.status(400).json({ error: 'appName is required' });
+  }
+  if (status && !['Running', 'Success', 'Failure'].includes(status)) {
+    return res.status(400).json({ error: 'status must be Running, Success, or Failure' });
   }
 
-  const feature = await upsertFeature({ featureKey, enabled, experimentKey });
+  const feature = await upsertFeature({ featureKey, isActive, status, variant, experimentKey, appName });
   res.json(feature);
 }
 

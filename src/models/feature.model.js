@@ -9,9 +9,18 @@ const featureSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
-    enabled: {
+    isActive: {
       type: Boolean,
       default: true,
+    },
+    status: {
+      type: String,
+      enum: ['Running', 'Success', 'Failure'],
+      default: 'Running',
+    },
+    variant: {
+      type: String,
+      default: null,
     },
     experimentKey: {
       type: String,
