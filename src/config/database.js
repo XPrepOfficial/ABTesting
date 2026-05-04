@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 async function connectDB() {
-  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/ab_testing';
+  const uri = process.env.MONGODB_URI || 'mongodb://preprod_rw_user:StrongPreprodPassword%40123@10.16.17.40:27017/speak-app?authSource=speak-app';
 
   mongoose.connection.on('disconnected', () => {
     console.warn('[DB] MongoDB disconnected');
