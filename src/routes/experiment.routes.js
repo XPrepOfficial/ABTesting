@@ -4,6 +4,6 @@ const { createOrUpdateExperiment } = require('../controllers/experiment.controll
 
 const router = Router();
 
-router.post('/experiment', asyncHandler(createOrUpdateExperiment));
+router.post('/', asyncHandler(createOrUpdateExperiment));
 
 module.exports = router;

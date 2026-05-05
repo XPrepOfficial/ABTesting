@@ -2,9 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const { connectDB } = require('./config/database');
-const variantRoutes = require('./routes/variant.routes');
-const experimentRoutes = require('./routes/experiment.routes');
-const featureRoutes = require('./routes/feature.routes');
+const routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -13,9 +11,7 @@ app.use(express.json());
 
 app.get('/health', (_req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
 
-app.use('/api', variantRoutes);
-app.use('/api', experimentRoutes);
-app.use('/api', featureRoutes);
+app.use(routes);
 
 app.use(errorHandler);
 

@@ -4,7 +4,7 @@ const { getFeaturesConfig, createOrUpdateFeature } = require('../controllers/fea
 
 const router = Router();
 
-router.get('/features/config', asyncHandler(getFeaturesConfig));
-router.post('/feature', asyncHandler(createOrUpdateFeature));
+router.get('/config', asyncHandler(getFeaturesConfig));
+router.post('/', asyncHandler(createOrUpdateFeature));
 
 module.exports = router;

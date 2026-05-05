@@ -4,8 +4,8 @@ const { getVariant, getVariants, getUserConfig } = require('../controllers/varia
 
 const router = Router();
 
-router.get('/variant', asyncHandler(getVariant));
-router.post('/variants', asyncHandler(getVariants));
-router.get('/variants/config', asyncHandler(getUserConfig));
+router.get('/', asyncHandler(getVariant));
+router.post('/', asyncHandler(getVariants));
+router.get('/config', asyncHandler(getUserConfig));
 
 module.exports = router;
