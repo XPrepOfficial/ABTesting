@@ -9,5 +9,5 @@ COPY . .
 COPY env.sh ./env_var.sh
 RUN chmod +x ./env_var.sh
 
-EXPOSE 3000
+EXPOSE 8080
 CMD [ "sh","-c",". ./env_var.sh && npm run start" ]
