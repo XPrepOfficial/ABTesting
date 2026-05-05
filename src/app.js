@@ -11,6 +11,10 @@ app.use(express.json());
 
 app.get('/health', (_req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
 
+app.get('/', (req, res) => {
+  res.status(200).send('AB Testing Service Running');
+});
+
 app.use(routes);
 
 app.use(errorHandler);
