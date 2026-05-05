@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "build": "tsc"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
