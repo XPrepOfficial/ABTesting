@@ -39,14 +39,15 @@ async function getFeaturesConfig(req, res) {
     } else if (feature.status === 'Failure') {
       entry = { enabled: false, variant: 'control' };
     } else {
-      entry = { enabled: feature.isActive };
-
       if (feature.experimentKey) {
         const experiment = experiments[feature.experimentKey];
-        entry.variant =
+        const variant =
           experiment && experiment.isActive
             ? resolveVariant(experiment.bucketMap, getBucketFromUserId(userId))
             : 'Control';
+        entry = { enabled: variant !== 'Control', variant };
+      } else {
+        entry = { enabled: feature.isActive };
       }
     }
 
