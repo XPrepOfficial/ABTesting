@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 async function connectDB() {
   const uri = process.env.MONGODB_URI;
-  console.log('uri', uri);
+  //console.log('uri', uri);
   mongoose.connection.on('disconnected', () => {
     console.warn('[DB] MongoDB disconnected');
   });
