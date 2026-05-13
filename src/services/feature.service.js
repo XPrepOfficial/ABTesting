@@ -1,7 +1,9 @@
 const Feature = require('../models/feature.model');
 
-async function getAllFeatures(appName) {
-  return Feature.find({ appName }).lean();
+async function getAllFeatures(appName, featureName) {
+  const query = { appName };
+  if (featureName) query.featureKey = featureName;
+  return Feature.find(query).lean();
 }
 
 async function upsertFeature({ featureKey, isActive, status, variant, experimentKey, appName }) {
