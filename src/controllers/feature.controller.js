@@ -12,7 +12,7 @@ function resolveVariant(bucketMap, bucket) {
 }
 
 async function getFeaturesConfig(req, res) {
-  const { userId, appName } = req.query;
+  const { userId, appName, featureName } = req.query;
 
   if (!userId) {
     return res.status(400).json({ error: 'userId query param is required' });
@@ -21,7 +21,7 @@ async function getFeaturesConfig(req, res) {
     return res.status(400).json({ error: 'appName query param is required' });
   }
 
-  const features = await getAllFeatures(appName);
+  const features = await getAllFeatures(appName, featureName);
 
   const experimentKeys = [
     ...new Set(features.map((f) => f.experimentKey).filter(Boolean)),
